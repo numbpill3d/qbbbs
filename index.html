@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum BBS - Widget Showcase</title>
+    <style>
+        /* Dynamic background animation */
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Windows 98 inspired styles */
+        :root {
+            --win98-gray: #c0c0c0;
+            --win98-border-light: #ffffff;
+            --win98-border-dark: #808080;
+            --win98-blue: #000080;
+            --win98-text: #000000;
+            --scrollbar-width: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+        }
+
+        body {
+            background-color: var(--win98-gray);
+            color: var(--win98-text);
+            padding: 10px;
+            line-height: 1.4;
+            position: relative;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, 
+                rgba(32, 32, 32, 0.1) 25%,
+                rgba(32, 32, 32, 0.1) 26%, 
+                transparent 27%, transparent 74%,
+                rgba(32, 32, 32, 0.1) 75%,
+                rgba(32, 32, 32, 0.1) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, 
+                rgba(32, 32, 32, 0.1) 25%,
+                rgba(32, 32, 32, 0.1) 26%, 
+                transparent 27%, transparent 74%,
+                rgba(32, 32, 32, 0.1) 75%,
+                rgba(32, 32, 32, 0.1) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            animation: gridMove 3s linear infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: linear-gradient(
+                transparent 50%, 
+                rgba(0, 0, 0, 0.1) 51%, 
+                transparent 52%
+            );
+            background-size: 100% 4px;
+            animation: scanline 8s linear infinite;
+        }
+
+        .header-image {
+            background: #000080;
+            margin-bottom: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header-placeholder {
+            border: 2px dashed #ffffff;
+            padding: 40px;
+            color: #ffffff;
+            margin: 10px;
+        }
+
+        .header-placeholder h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #000000;
+        }
+
+        /* Decorative widgets */
+        .decorative-widget {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .clock-widget {
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .cyber-corner {
+            bottom: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: 
+                linear-gradient(45deg, transparent 48%, #000080 49%, #000080 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, #000080 49%, #000080 51%, transparent 52%);
+            background-size: 30px 30px;
+            opacity: 0.3;
+        }
+
+        /* Windows 98 style borders */
+        .win98-box {
+            border: 2px solid;
+            border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+            background: var(--win98-gray);
+            padding: 2px;
+        }
+
+        /* Header/Navigation */
+        .nav-bar {
+            background: var(--win98-blue);
+            color: white;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+        }
+
+        .nav-bar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Main layout */
+        .container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Widget showcase area */
+        .widget-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .widget-display {
+            min-height: 400px;
+            padding: 10px;
+            background: #fff;
+        }
+
+        /* Code display area */
+        .code-display {
+            position: relative;
+            background: #000812;
+            color: #a4ffff;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            height: 400px;
+            overflow-y: auto;
+            text-shadow: 0 0 2px #00ffff;
+            animation: textFlicker 8s infinite;
+        }
+
+        .code-display pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-right: 30px;
+            opacity: 0.9;
+        }
+
+        .code-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+
+        @keyframes textFlicker {
+            0% { opacity: 0.92; }
+            3% { opacity: 0.9; }
+            5% { opacity: 0.92; }
+            10% { opacity: 0.90; }
+            15% { opacity: 0.92; }
+            20% { opacity: 0.94; }
+            25% { opacity: 0.90; }
+            30% { opacity: 0.92; }
+            35% { opacity: 0.94; }
+            40% { opacity: 0.90; }
+            45% { opacity: 0.92; }
+            50% { opacity: 0.94; }
+            55% { opacity: 0.92; }
+            60% { opacity: 0.94; }
+            65% { opacity: 0.90; }
+            70% { opacity: 0.92; }
+            75% { opacity: 0.94; }
+            80% { opacity: 0.90; }
+            85% { opacity: 0.92; }
+            90% { opacity: 0.94; }
+            95% { opacity: 0.92; }
+            100% { opacity: 0.94; }
+        }
+
+        /* Custom scrollbar */
+        .code-display::-webkit-scrollbar {
+            width: var(--scrollbar-width);
+            height: var(--scrollbar-width);
+        }
+
+        .code-display::-webkit-scrollbar-track {
+            background: var(--win98-gray);
+            border: 2px solid;
+            border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+        }
+
+        .code-display::-webkit-scrollbar-thumb {
+            background: var(--win98-gray);
+            border: 2px solid;
+            border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+        }
+
+        /* Widget selector */
+        .widget-selector {
+            padding: 10px;
+        }
+
+        .widget-selector button {
+            width: 100%;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        /* Copy button */
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 2px 8px;
+        }
+
+        /* Windows 98 button style */
+        .win98-button {
+            padding: 4px 10px;
+            border: 2px solid;
+            border-color: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+            background: var(--win98-gray);
+            cursor: pointer;
+        }
+
+        .win98-button:active {
+            border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+        }
+
+        /* Retro status bar */
+        .status-bar {
+            background: var(--win98-gray);
+            border-top: 1px solid var(--win98-border-dark);
+            padding: 2px 5px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        /* Fake ad banner */
+        .ad-banner {
+            background: #000;
+            color: #ff0;
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Image Area -->
+    <div class="header-image win98-box">
+        <div class="header-placeholder">
+            <h1>QUANTUM BBS</h1>
+            <p>[Header Image: 800x200px]</p>
+        </div>
+    </div>
+
+    <nav class="nav-bar win98-box">
+        <ul>
+            <li><a href="#">Widgets</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Downloads</a></li>
+            <li><a href="#">Support</a></li>
+        </ul>
+    </nav>
+
+    <div class="ad-banner win98-box">
+        🌟 NEW! Download CyberSpace Navigator 2.0 - Experience the FUTURE of the Internet! 🌟
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="widget-selector win98-box">
+                <h3>Available Widgets</h3>
+                <button class="win98-button" onclick="showWidget('visitor-counter')">Visitor Counter</button>
+                <button class="win98-button" onclick="showWidget('guestbook')">Guestbook</button>
+                <button class="win98-button" onclick="showWidget('chat-box')">Chat Box</button>
+                <button class="win98-button" onclick="showWidget('hit-counter')">Hit Counter</button>
+                <button class="win98-button" onclick="showWidget('weather')">Weather Widget</button>
+            </div>
+        </aside>
+
+        <main class="widget-showcase win98-box">
+            <div class="widget-display win98-box" id="widget-preview">
+                <h2>Widget Preview</h2>
+                <!-- Widget will be displayed here -->
+                <div id="current-widget">
+                    Select a widget from the sidebar to preview
+                </div>
+            </div>
+
+            <div class="code-display win98-box">
+                <button class="win98-button copy-button" onclick="copyEmbedCode()">Copy</button>
+                <pre id="embed-code">
+<!-- Select a widget to see its embed code -->
+                </pre>
+            </div>
+        </main>
+    </div>
+
+    <div class="status-bar win98-box">
+        Widgets Loaded: 5 | Current Time: <span id="current-time">00:00:00</span> | Last Updated: 2025-01-06
+    </div>
+
+    <!-- Decorative Widgets -->
+    <div class="decorative-widget clock-widget" id="digital-clock">00:00:00</div>
+    <div class="decorative-widget cyber-corner"></div>
+
+    <script>
+        // Widget definitions
+        const widgets = {
+            'visitor-counter': {
+                preview: `<div style="text-align: center; padding: 20px;">
+                            <h3>Visitor Counter</h3>
+                            <div style="font-size: 24px; margin: 10px;">1,337</div>
+                         </div>`,
+                code: `<!-- QuantumBBS Visitor Counter Widget -->
+<script src="https://quantum-bbs.neocities.org/widgets/visitor-counter.js"><\/script>
+<div class="quantum-visitor-counter" data-style="retro" data-glitch="enabled"></div>
+<!-- End QuantumBBS Widget -->`
+            },
+            'guestbook': {
+                preview: `<div style="padding: 10px;">
+                            <h3>Guestbook</h3>
+                            <div style="border: 1px solid #000; padding: 5px; margin: 5px;">
+                                <strong>CyberPunk2077:</strong> Cool site!
+                            </div>
+                         </div>`,
+                code: `<script src="https://quantum-bbs.neocities.org/widgets/guestbook.js"><\/script>
+<div class="quantum-guestbook" data-theme="win98"></div>`
+            },
+            // Add more widgets here
+        };
+
+        // Function to show selected widget
+        function showWidget(widgetId) {
+            const widget = widgets[widgetId];
+            if (widget) {
+                document.getElementById('current-widget').innerHTML = widget.preview;
+                document.getElementById('embed-code').textContent = widget.code;
+            }
+        }
+
+        // Copy embed code function
+        function copyEmbedCode() {
+            const code = document.getElementById('embed-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Embed code copied to clipboard!');
+            });
+        }
+
+        // Update all clocks
+        function updateTime() {
+            document.getElementById('digital-clock').textContent = 
+                new Date().toLocaleTimeString();
+            const now = new Date();
+            document.getElementById('current-time').textContent = 
+                now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
